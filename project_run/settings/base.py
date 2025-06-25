@@ -110,3 +110,8 @@ STATIC_ROOT = 'static'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# company info
+COMPANY_NAME = 'Песчаная Походка'
+SLOGAN = 'Двигайся в ритме Шаи-Хулуда'
+CONTACTS = 'Планета Арракис, Город Арракен, Улица Пола Атрейдеса, д. IV'
