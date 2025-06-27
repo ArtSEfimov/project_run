@@ -23,9 +23,6 @@ class RunViewSet(ModelViewSet):
     queryset = Run.objects.select_related('athlete').all()
     serializer_class = RunSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(athlete=self.request.user)
-
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()
