@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from rest_framework import filters, status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
@@ -55,7 +56,7 @@ class StartView(APIView):
         run.status = Run.Status.IN_PROGRESS
         run.save()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(model_to_dict(run), status=status.HTTP_200_OK)
 
 
 class StopView(APIView):
@@ -67,4 +68,4 @@ class StopView(APIView):
         run.status = Run.Status.FINISHED
         run.save()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(model_to_dict(run), status=status.HTTP_200_OK)
