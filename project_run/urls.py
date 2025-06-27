@@ -19,14 +19,16 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from app_run import views
-from app_run.views import RunViewSet, UserViewSet
+from app_run.views import RunViewSet, UserViewSet, StartView, StopView
 
 router = DefaultRouter()
-router.register('api/runs', RunViewSet, basename='runs')
-router.register('api/users', UserViewSet, basename='users')
+router.register("api/runs", RunViewSet, basename="runs")
+router.register("api/users", UserViewSet, basename="users")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/company_details/', views.company_info, name="company_info"),
-    path('', include(router.urls)),
+    path("admin/", admin.site.urls),
+    path("api/company_details/", views.company_info, name="company_info"),
+    path("", include(router.urls)),
+    path("api/runs/<int:run_id>/start/", StartView.as_view()),
+    path("api/runs/<int:run_id>/stop/", StopView.as_view()),
 ]
