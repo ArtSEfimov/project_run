@@ -4,19 +4,19 @@ from app_run.models import Run
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
-    type = serializers.SerializerMethodField(method_name='user_type')
-
     class Meta:
         model = User
-        fields = ('id', 'username', 'last_name', 'first_name', 'type')
-
-    def user_type(self, obj):
-        return "coach" if obj.is_staff else "athlete"
+        fields = ('id', 'username', 'last_name', 'first_name')
 
 
 class UserSerializer(PartialUserSerializer):
+    type = serializers.SerializerMethodField(method_name='user_type')
+
     class Meta(PartialUserSerializer.Meta):
-        fields = PartialUserSerializer.Meta.fields + ('date_joined',)
+        fields = PartialUserSerializer.Meta.fields + ('date_joined', 'type')
+
+    def user_type(self, obj):
+        return "coach" if obj.is_staff else "athlete"
 
 
 class RunSerializer(serializers.ModelSerializer):
