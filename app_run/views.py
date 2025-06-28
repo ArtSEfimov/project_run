@@ -34,17 +34,23 @@ class RunPagination(PageNumberPagination):
 class RunViewSet(ModelViewSet):
     queryset = Run.objects.select_related("athlete").all()
     serializer_class = RunSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filter_fields = ["status", "athlete"]
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_fields = ("status", "athlete")
     ordering_fields = ["created_at"]
     pagination_class = RunPagination
+
+
+class UserPagination(PageNumberPagination):
+    page_size_query_param = "size"
+    max_page_size = 10
 
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = (SearchFilter,)
+    filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("first_name", "last_name")
+    ordering_fields = ["date_joined"]
 
     def get_queryset(self):
         qs = self.queryset
