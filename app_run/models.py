@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class Run(models.Model):
     class Status(models.TextChoices):
-        INIT = "init", "Забег инициализирован"
-        IN_PROGRESS = "in_progress", "Забег начат"
-        FINISHED = "finished", "Забег закончен"
+        INIT = ("init", "Забег инициализирован")
+        IN_PROGRESS = ("in_progress", "Забег начат")
+        FINISHED = ("finished", "Забег закончен")
 
     created_at = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
