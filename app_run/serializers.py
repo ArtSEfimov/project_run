@@ -11,12 +11,16 @@ class PartialUserSerializer(serializers.ModelSerializer):
 
 class UserSerializer(PartialUserSerializer):
     type = serializers.SerializerMethodField(method_name="user_type")
+    runs_finished = serializers.SerializerMethodField()
 
     class Meta(PartialUserSerializer.Meta):
-        fields = PartialUserSerializer.Meta.fields + ("date_joined", "type")
+        fields = PartialUserSerializer.Meta.fields + ("date_joined", "type", "runs_finished")
 
     def user_type(self, obj):
         return "coach" if obj.is_staff else "athlete"
+
+    def get_runs_finished(self, obj):
+        return obj.run_set.filter(status=Run.Status.FINISHED).count()
 
 
 class RunSerializer(serializers.ModelSerializer):
