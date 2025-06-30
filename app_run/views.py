@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -54,7 +55,7 @@ class UserViewSet(ReadOnlyModelViewSet):
     pagination_class = UserPagination
 
     def get_queryset(self):
-        qs = self.queryset
+        qs = self.queryset.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
         user_type = self.request.query_params.get("type", None)
         if user_type:
             if user_type == "athlete":
