@@ -12,7 +12,10 @@ class PartialUserSerializer(serializers.ModelSerializer):
 class AthleteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AthleteInfo
-        fields = ("id", "goals", "weight")
+        fields = ("user_id", "goals", "weight")
+
+    def get_user_id(self, obj):
+        return obj.user__pk
 
 
 class UserSerializer(PartialUserSerializer):
