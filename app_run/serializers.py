@@ -22,11 +22,10 @@ class UserSerializer(PartialUserSerializer):
 class RunSerializer(serializers.ModelSerializer):
     athlete_data = PartialUserSerializer(source="athlete", read_only=True)
     athlete = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        write_only=True,
+        queryset=User.objects.all()
     )
 
     class Meta:
         model = Run
         fields = "__all__"
-        read_only_fields = ("status",)
+        read_only_fields = ["status"]
