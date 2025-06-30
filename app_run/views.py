@@ -2,15 +2,16 @@ from django.db.models import Count, Q
 from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, GenericAPIView, RetrieveAPIView
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from app_run.models import Run
-from .serializers import RunSerializer, UserSerializer
+from app_run.models import Run, AthleteInfo
+from .serializers import RunSerializer, UserSerializer, AthleteInfoSerializer
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -47,7 +48,7 @@ class UserPagination(PageNumberPagination):
 
 
 class UserViewSet(ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
     serializer_class = UserSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("first_name", "last_name")
@@ -55,7 +56,7 @@ class UserViewSet(ReadOnlyModelViewSet):
     pagination_class = UserPagination
 
     def get_queryset(self):
-        qs = self.queryset.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
+        qs = self.queryset
         user_type = self.request.query_params.get("type", None)
         if user_type:
             if user_type == "athlete":
@@ -89,3 +90,20 @@ class StopView(APIView):
         run.save()
 
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
+
+
+class AthleteInfoView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin):
+    queryset = UserViewSet.queryset
+    serializer_class = AthleteInfoSerializer
+    lookup_url_kwarg = "user_id"
+
+    def get_object(self):
+        user_object = super().get_object()
+        info_object, is_created = AthleteInfo.objects.get_or_create(user=user_object)
+        return info_object
+
+    def put(self, request, user_id):
+        return self.update(request, user_id)
+
+    def get(self, request, user_id):
+        return self.retrieve(request, user_id)
