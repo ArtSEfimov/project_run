@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from app_run.models import Run, AthleteInfo
+from app_run.models import Run, AthleteInfo, Challenge
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
@@ -42,3 +42,10 @@ class RunSerializer(serializers.ModelSerializer):
         model = Run
         fields = "__all__"
         read_only_fields = ["status"]
+
+
+class ChallengeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Challenge
+        fields = ["full_name"]
+        read_only_fields = ["full_name"]

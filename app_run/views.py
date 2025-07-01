@@ -10,7 +10,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from app_run.models import Run, AthleteInfo
+from .models import Run, AthleteInfo, Challenge
 from .serializers import RunSerializer, UserSerializer, AthleteInfoSerializer
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
@@ -47,8 +47,11 @@ class UserPagination(PageNumberPagination):
     max_page_size = 10
 
 
-class UserViewSet(ReadOnlyModelViewSet):
+class UserAnnotatedQuerySet:
     queryset = User.objects.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
+
+
+class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("first_name", "last_name")
@@ -88,12 +91,15 @@ class StopView(APIView):
 
         run.status = Run.Status.FINISHED
         run.save()
+        user = UserAnnotatedQuerySet.queryset.get(run=run)
+        if user.runs_finished == 10:
+            Challenge.objects.create(full_name="Сделай 10 Забегов!",
+                                     athlete=user)
 
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
 
 
-class AthleteInfoView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin):
-    queryset = UserViewSet.queryset
+class AthleteInfoView(UserAnnotatedQuerySet, GenericAPIView, RetrieveModelMixin, UpdateModelMixin):
     serializer_class = AthleteInfoSerializer
     lookup_url_kwarg = "user_id"
 

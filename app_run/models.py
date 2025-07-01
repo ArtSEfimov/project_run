@@ -19,3 +19,11 @@ class AthleteInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     goals = models.TextField(blank=True, default="")
     weight = models.IntegerField(blank=True, default=0, validators=[MinValueValidator(1), MaxValueValidator(899)])
+
+
+class Challenge(models.Model):
+    full_name = models.CharField(max_length=50)
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                related_name="challenges",
+                                related_query_name="query_challenges")
+
