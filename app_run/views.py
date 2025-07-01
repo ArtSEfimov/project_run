@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404, GenericAPIView, RetrieveAPIView
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django.conf import settings
@@ -129,3 +129,4 @@ def get_challenge_info(request):
     return Response(
         {"challenges": Challenge.objects.all().values()}, status=status.HTTP_200_OK
     )
+
