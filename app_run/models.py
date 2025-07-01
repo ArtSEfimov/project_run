@@ -29,6 +29,6 @@ class Challenge(models.Model):
 
 
 class Position(models.Model):
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
-    latitude = models.FloatField(default=0.0)
-    longitude = models.FloatField(default=0.0)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE)
+    latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
+    longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)

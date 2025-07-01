@@ -56,10 +56,6 @@ class ChallengeSerializer(serializers.ModelSerializer):
 
 
 class PositionSerializer(serializers.ModelSerializer):
-    # run = serializers.PrimaryKeyRelatedField(
-    #     queryset=Run.objects.all()
-    # )
-
     class Meta:
         model = Position
         fields = "__all__"

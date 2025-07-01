@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from .models import Run, AthleteInfo
+from .models import Run, AthleteInfo, Position
 
 # Register your models here.
 admin.site.register(Run)
 admin.site.register(AthleteInfo)
+admin.site.register(Position)
