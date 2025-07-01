@@ -27,8 +27,8 @@ def get_challenge_info(request):
             user = user_queryset[0]
             challenges = Challenge.objects.filter(athlete=user)
 
-            return Response({"challenges": challenges}, status=status.HTTP_200_OK)
+            return Response(challenges, status=status.HTTP_200_OK)
 
     return Response(
-        {"challenges": Challenge.objects.all()}, status=status.HTTP_200_OK
+        Challenge.objects.all(), status=status.HTTP_200_OK
     )
