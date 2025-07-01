@@ -1,6 +1,9 @@
+from django.db.models import Count, Q
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from app_run.models import Run, AthleteInfo, Challenge
+from rest_framework.generics import get_object_or_404
+
+from .models import Run, AthleteInfo, Challenge, Position
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
@@ -35,7 +38,8 @@ class UserSerializer(PartialUserSerializer):
 class RunSerializer(serializers.ModelSerializer):
     athlete_data = PartialUserSerializer(source="athlete", read_only=True)
     athlete = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all()
+        queryset=User.objects.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
+
     )
 
     class Meta:
@@ -49,3 +53,28 @@ class ChallengeSerializer(serializers.ModelSerializer):
         model = Challenge
         fields = ["full_name"]
         read_only_fields = ["full_name"]
+
+
+class PositionSerializer(serializers.ModelSerializer):
+    # run = serializers.PrimaryKeyRelatedField(
+    #     queryset=Run.objects.all()
+    # )
+
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+    def validate_run(self, run_object):
+        if run_object.status == Run.Status.IN_PROGRESS:
+            return run_object
+        raise serializers.ValidationError("Забег должен быть только в статусе 'in_progress'")
+
+    def validate_latitude(self, value):
+        if value < -90 or value > 90:
+            raise serializers.ValidationError("Широта должна находиться в диапазоне от -90.0 до +90.0 градусов")
+        return value
+
+    def validate_longitude(self, value):
+        if value < -180 or value > 180:
+            raise serializers.ValidationError("Долгота должна находиться в диапазоне от -180.0 до +180.0 градусов")
+        return value

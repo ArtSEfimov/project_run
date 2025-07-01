@@ -27,3 +27,8 @@ class Challenge(models.Model):
                                 related_name="challenges",
                                 related_query_name="query_challenges")
 
+
+class Position(models.Model):
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
+    latitude = models.FloatField(default=0.0)
+    longitude = models.FloatField(default=0.0)

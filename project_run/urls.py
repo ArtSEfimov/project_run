@@ -18,16 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from app_run import views
-from app_run.views import RunViewSet, UserViewSet, StartView, StopView, AthleteInfoView, get_challenge_info
+from app_run.views.position_views import PositionView
+from app_run.views.run_views import RunViewSet
+from app_run.views.start_stop_views import StartView, StopView
+from app_run.views.user_views import UserViewSet, AthleteInfoView
+from app_run.views.views import get_challenge_info, company_info
 
 router = DefaultRouter()
 router.register("api/runs", RunViewSet, basename="runs")
 router.register("api/users", UserViewSet, basename="users")
+router.register("api/positions", PositionView, basename="position")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/company_details/", views.company_info, name="company_info"),
+    path("api/company_details/", company_info, name="company_info"),
     path("", include(router.urls)),
     path("api/runs/<int:run_id>/start/", StartView.as_view()),
     path("api/runs/<int:run_id>/stop/", StopView.as_view()),
