@@ -30,9 +30,8 @@ class StopView(APIView):
         run.status = Run.Status.FINISHED
         run.save()
         user = UserAnnotatedQuerySet.queryset.get(run=run)
-        if user.runs_finished == 10:
+        if user.runs_finished % 10 == 0:
             Challenge.objects.create(full_name="Сделай 10 Забегов!",
                                      athlete=user)
 
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
-
