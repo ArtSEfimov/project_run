@@ -113,3 +113,19 @@ class AthleteInfoView(UserAnnotatedQuerySet, GenericAPIView, RetrieveModelMixin,
 
     def get(self, request, user_id):
         return self.retrieve(request, user_id)
+
+
+@api_view(["GET"])
+def get_challenge_info(request):
+    user_id = request.query_params.get("athlete", None)
+    if user_id:
+        user_queryset = User.objects.filter(pk=user_id)
+        if user_queryset:
+            user = user_queryset[0]
+            challenges = Challenge.objects.filter(athlete=user)
+
+            return Response({"challenges": challenges}, status=status.HTTP_200_OK)
+
+    return Response(
+        {"challenges": Challenge.objects.all().values()}, status=status.HTTP_200_OK
+    )
