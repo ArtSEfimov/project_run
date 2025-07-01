@@ -30,5 +30,5 @@ def get_challenge_info(request):
             return Response({"challenges": challenges}, status=status.HTTP_200_OK)
 
     return Response(
-        {"challenges": Challenge.objects.all().values()}, status=status.HTTP_200_OK
+        {"challenges": Challenge.objects.all()}, status=status.HTTP_200_OK
     )
