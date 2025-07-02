@@ -37,7 +37,7 @@ class StopView(APIView):
 
         run.save()
 
-        # check 50 km challenge
+        # check 50_km challenge
         check_50_km_challenge(run.athlete.pk)
 
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
