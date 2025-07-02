@@ -45,14 +45,14 @@ class RunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Run
         fields = "__all__"
-        read_only_fields = ["status"]
+        read_only_fields = ("status", "distance")
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
-        fields = ["athlete", "full_name"]
-        read_only_fields = ["full_name", "athlete"]
+        fields = ("athlete", "full_name")
+        read_only_fields = ("full_name", "athlete")
 
 
 class PositionSerializer(serializers.ModelSerializer):
