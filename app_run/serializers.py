@@ -1,7 +1,6 @@
 from django.db.models import Count, Q
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from rest_framework.generics import get_object_or_404
 
 from .models import Run, AthleteInfo, Challenge, Position
 
@@ -38,8 +37,7 @@ class UserSerializer(PartialUserSerializer):
 class RunSerializer(serializers.ModelSerializer):
     athlete_data = PartialUserSerializer(source="athlete", read_only=True)
     athlete = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
-
+        queryset=User.objects.all()
     )
 
     class Meta:

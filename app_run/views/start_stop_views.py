@@ -1,12 +1,11 @@
 from django.forms import model_to_dict
-from haversine import haversine
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .user_views import UserAnnotatedQuerySet
-from ..models import Run, Challenge, Position
+from .run_utils import check_10_runs_challenge, get_distance, check_50_km_challenge
+from ..models import Run
 
 
 class StartView(APIView):
@@ -30,29 +29,15 @@ class StopView(APIView):
 
         run.status = Run.Status.FINISHED
 
-        # check challenge
-        get_challenge(run.pk)
+        # check 10 runs challenge
+        check_10_runs_challenge(run.pk)
 
         # calculate distance
         run.distance = get_distance(run.pk)
 
         run.save()
+
+        # check 50 km challenge
+        check_50_km_challenge(run.athlete.pk)
+
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
-
-
-def get_challenge(run_id):
-    user = UserAnnotatedQuerySet.queryset.get(run=run_id)
-    if user.runs_finished % 10 == 0:
-        Challenge.objects.create(full_name="Сделай 10 Забегов!",
-                                 athlete=user)
-
-
-def get_distance(run_id):
-    points = Position.objects.filter(run=run_id)
-    distance = 0
-    for i in range(len(points) - 1):
-        start = points[i].latitude, points[i].longitude
-        finish = points[i + 1].latitude, points[i + 1].longitude
-        distance += haversine(start, finish)
-
-    return distance
