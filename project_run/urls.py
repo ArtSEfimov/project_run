@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from app_run.views.challenge_view import get_challenge_info
-from app_run.views.collectible_items_view import CollectibleItemView
+from app_run.views.collectible_items_view import CollectibleItemView, UploadFileView
 from app_run.views.position_views import PositionView
 from app_run.views.run_views import RunViewSet
 from app_run.views.start_stop_views import StartView, StopView
@@ -39,6 +39,6 @@ urlpatterns = [
     path("api/runs/<int:run_id>/stop/", StopView.as_view(), name="stop_run"),
     path("api/athlete_info/<int:user_id>/", AthleteInfoView.as_view(), name="athlete_info"),
     path("api/challenges/", get_challenge_info, name="challenge_info"),
-    path("api/upload_file/", CollectibleItemView.as_view(), name="collectible_item"),
-    path("api/upload_file/",)
+    path("api/collectible_item/", CollectibleItemView.as_view(), name="collectible_item"),
+    path("api/upload_file/", UploadFileView.as_view(), name="upload_file"),
 ]

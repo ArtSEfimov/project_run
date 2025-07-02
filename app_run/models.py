@@ -36,7 +36,7 @@ class Position(models.Model):
 
 class CollectibleItem(models.Model):
     name = models.CharField(max_length=50)
-    uid = models.UUIDField()
+    uid = models.CharField(max_length=50)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
     picture = models.URLField()

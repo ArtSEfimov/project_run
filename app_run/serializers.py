@@ -56,12 +56,12 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = "__all__"
         extra_kwargs = {
-            "latitude": {
-                "validators": [latitude_validator],
-            },
-            "longitude": {
-                "validators": [longitude_validator],
-            },
+            "latitude":
+                {"validators": [latitude_validator],
+                 },
+            "longitude":
+                {"validators": [longitude_validator],
+                 },
         }
 
     def validate_run(self, run_object):
@@ -73,7 +73,7 @@ class PositionSerializer(serializers.ModelSerializer):
 class CollectibleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectibleItem
-        field = "__all__"
+        fields = "__all__"
         extra_kwargs = {
             "latitude": {
                 "validators": [latitude_validator],
@@ -82,3 +82,12 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
                 "validators": [longitude_validator],
             },
         }
+
+
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(write_only=True, required=True)
+    wrong_rows = serializers.ListField(
+        child=serializers.ListField(
+            child=serializers.JSONField(
+                allow_null=True)),
+        read_only=True)
