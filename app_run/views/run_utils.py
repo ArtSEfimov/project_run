@@ -13,7 +13,7 @@ def check_10_runs_challenge(run_id):
 
 def check_50_km_challenge(user_id):
     user_distance = Run.objects.filter(athlete=user_id).aggregate(total_distance=Sum("distance"))
-    if user_distance >= 50:
+    if user_distance["total_distance"] >= 50:
         Challenge.objects.get_or_create(full_name="Пробеги 50 километров!",
                                         athlete_id=user_id)
 
