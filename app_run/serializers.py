@@ -86,8 +86,8 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField(write_only=True, required=True)
-    wrong_rows = serializers.ListField(
-        child=serializers.ListField(
-            child=serializers.JSONField(
-                allow_null=True)),
-        read_only=True)
+    # wrong_rows = serializers.ListField(
+    #     child=serializers.ListField(
+    #         child=serializers.JSONField(
+    #             allow_null=True)),
+    #     read_only=True)

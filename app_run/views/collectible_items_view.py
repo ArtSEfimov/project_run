@@ -41,6 +41,6 @@ class UploadFileView(GenericAPIView):
             else:
                 wrong_rows.append(list(row))
 
-        output_serializer = FileUploadSerializer(instance={"wrong_rows": wrong_rows})
+        # output_serializer = FileUploadSerializer(instance={"wrong_rows": wrong_rows})
 
-        return Response(output_serializer.data, status=status.HTTP_200_OK)
+        return Response(wrong_rows, status=status.HTTP_200_OK)
