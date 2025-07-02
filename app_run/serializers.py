@@ -1,8 +1,8 @@
-from django.db.models import Count, Q
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 
-from .models import Run, AthleteInfo, Challenge, Position
+from .models import Run, AthleteInfo, Challenge, Position, CollectibleItem
+from .validators import latitude_validator, longitude_validator
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
@@ -36,9 +36,7 @@ class UserSerializer(PartialUserSerializer):
 
 class RunSerializer(serializers.ModelSerializer):
     athlete_data = PartialUserSerializer(source="athlete", read_only=True)
-    athlete = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all()
-    )
+    athlete = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Run
@@ -57,18 +55,30 @@ class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
         fields = "__all__"
+        extra_kwargs = {
+            "latitude": {
+                "validators": [latitude_validator],
+            },
+            "longitude": {
+                "validators": [longitude_validator],
+            },
+        }
 
     def validate_run(self, run_object):
         if run_object.status == Run.Status.IN_PROGRESS:
             return run_object
         raise serializers.ValidationError("Забег должен быть только в статусе 'in_progress'")
 
-    def validate_latitude(self, value):
-        if value < -90 or value > 90:
-            raise serializers.ValidationError("Широта должна находиться в диапазоне от -90.0 до +90.0 градусов")
-        return value
 
-    def validate_longitude(self, value):
-        if value < -180 or value > 180:
-            raise serializers.ValidationError("Долгота должна находиться в диапазоне от -180.0 до +180.0 градусов")
-        return value
+class CollectibleItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CollectibleItem
+        field = "__all__"
+        extra_kwargs = {
+            "latitude": {
+                "validators": [latitude_validator],
+            },
+            "longitude": {
+                "validators": [longitude_validator],
+            },
+        }

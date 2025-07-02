@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+from app_run.views.challenge_view import get_challenge_info
+from app_run.views.collectible_items_view import CollectibleItemView
 from app_run.views.position_views import PositionView
 from app_run.views.run_views import RunViewSet
 from app_run.views.start_stop_views import StartView, StopView
 from app_run.views.user_views import UserViewSet, AthleteInfoView
-from app_run.views.views import get_challenge_info, company_info
+from app_run.views.views import company_info
 
 router = DefaultRouter()
 router.register("api/runs", RunViewSet, basename="runs")
@@ -33,8 +35,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/company_details/", company_info, name="company_info"),
     path("", include(router.urls)),
-    path("api/runs/<int:run_id>/start/", StartView.as_view()),
-    path("api/runs/<int:run_id>/stop/", StopView.as_view()),
-    path("api/athlete_info/<int:user_id>/", AthleteInfoView.as_view()),
-    path("api/challenges/", get_challenge_info)
+    path("api/runs/<int:run_id>/start/", StartView.as_view(), name="start_run"),
+    path("api/runs/<int:run_id>/stop/", StopView.as_view(), name="stop_run"),
+    path("api/athlete_info/<int:user_id>/", AthleteInfoView.as_view(), name="athlete_info"),
+    path("api/challenges/", get_challenge_info, name="challenge_info"),
+    path("api/upload_file/", CollectibleItemView.as_view(), name="collectible_item"),
+    path("api/upload_file/",)
 ]

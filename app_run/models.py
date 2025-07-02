@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class Run(models.Model):
@@ -24,8 +24,7 @@ class AthleteInfo(models.Model):
 
 class Challenge(models.Model):
     full_name = models.CharField(max_length=50)
-    athlete = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
-                                related_name="challenges",
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="challenges",
                                 related_query_name="query_challenges")
 
 
@@ -33,3 +32,12 @@ class Position(models.Model):
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
+
+
+class CollectibleItem(models.Model):
+    name = models.CharField(max_length=50)
+    uid = models.UUIDField()
+    latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
+    longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
+    picture = models.URLField()
+    value = models.IntegerField()

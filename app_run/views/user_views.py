@@ -1,22 +1,17 @@
-from django.contrib.auth.models import User
-from django.db.models import Count, Q
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from ..models import AthleteInfo, Run
+from .views import UserAnnotatedQuerySet
+from ..models import AthleteInfo
 from ..serializers import UserSerializer, AthleteInfoSerializer
 
 
 class UserPagination(PageNumberPagination):
     page_size_query_param = "size"
     max_page_size = 10
-
-
-class UserAnnotatedQuerySet:
-    queryset = User.objects.annotate(runs_finished=Count("run", filter=Q(run__status=Run.Status.FINISHED)))
 
 
 class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
