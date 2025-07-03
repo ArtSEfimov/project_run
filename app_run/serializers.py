@@ -41,7 +41,7 @@ class RunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Run
         fields = "__all__"
-        read_only_fields = ("status", "distance")
+        read_only_fields = ("status", "distance", "run_time_seconds")
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
@@ -52,6 +52,8 @@ class ChallengeSerializer(serializers.ModelSerializer):
 
 
 class PositionSerializer(serializers.ModelSerializer):
+    date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%f")
+
     class Meta:
         model = Position
         fields = "__all__"

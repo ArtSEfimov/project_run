@@ -29,3 +29,7 @@ def get_distance(run_id):
         distance += haversine(start, finish)
 
     return distance
+
+
+def get_run_time(run_id):
+    pass

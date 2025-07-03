@@ -4,7 +4,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .run_utils import check_10_runs_challenge, get_distance, check_50_km_challenge
+from .run_utils import check_10_runs_challenge, get_distance, check_50_km_challenge, get_run_time
 from ..models import Run
 
 
@@ -34,6 +34,9 @@ class StopView(APIView):
 
         # calculate distance
         run.distance = get_distance(run.pk)
+
+        # calculate time
+        run.run_time_seconds = get_run_time(run.pk)
 
         run.save()
 
