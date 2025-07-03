@@ -34,6 +34,7 @@ class UploadFileView(APIView):
             if row_serializer.is_valid(raise_exception=False):
                 row_serializer.save()
             else:
+                print(row_serializer.errors)
                 wrong_rows.append(list(row))
 
         return Response(wrong_rows, status=status.HTTP_200_OK)
