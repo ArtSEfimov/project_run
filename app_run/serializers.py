@@ -71,9 +71,11 @@ class PositionSerializer(serializers.ModelSerializer):
 
 
 class CollectibleItemSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='picture')
+
     class Meta:
         model = CollectibleItem
-        fields = "__all__"
+        exclude = ["picture"]
         extra_kwargs = {
             "latitude": {
                 "validators": [latitude_validator],
@@ -86,8 +88,3 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField(write_only=True, required=True)
-    # wrong_rows = serializers.ListField(
-    #     child=serializers.ListField(
-    #         child=serializers.JSONField(
-    #             allow_null=True)),
-    #     read_only=True)

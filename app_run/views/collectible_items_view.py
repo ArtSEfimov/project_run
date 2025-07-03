@@ -1,8 +1,9 @@
 from openpyxl.reader.excel import load_workbook
 from rest_framework import status
-from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ..models import CollectibleItem
 from ..serializers import CollectibleItemSerializer, FileUploadSerializer
@@ -13,7 +14,7 @@ class CollectibleItemView(ListAPIView):
     serializer_class = CollectibleItemSerializer
 
 
-class UploadFileView(GenericAPIView):
+class UploadFileView(APIView):
     serializer_class = FileUploadSerializer
     parser_classes = (MultiPartParser, FormParser)
 
@@ -25,12 +26,7 @@ class UploadFileView(GenericAPIView):
         worksheet = workbook.active
 
         header_row = next(worksheet.iter_rows(min_row=1, max_row=1, values_only=True))
-        headers = list()
-        for h in header_row:
-            if h.lower() == "url":
-                headers.append("picture")
-                continue
-            headers.append(h.lower())
+        headers = list(h.lower() for h in header_row)
 
         wrong_rows = list()
 
@@ -40,7 +36,5 @@ class UploadFileView(GenericAPIView):
                 row_serializer.save()
             else:
                 wrong_rows.append(list(row))
-
-        # output_serializer = FileUploadSerializer(instance={"wrong_rows": wrong_rows})
 
         return Response(wrong_rows, status=status.HTTP_200_OK)
