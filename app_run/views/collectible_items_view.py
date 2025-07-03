@@ -15,11 +15,10 @@ class CollectibleItemView(ListAPIView):
 
 
 class UploadFileView(APIView):
-    serializer_class = FileUploadSerializer
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        input_serializer = self.serializer_class(data=request.data)
+        input_serializer = FileUploadSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
         file_object = input_serializer.validated_data["file"]
         workbook = load_workbook(file_object)

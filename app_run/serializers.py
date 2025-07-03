@@ -5,12 +5,6 @@ from .models import Run, AthleteInfo, Challenge, Position, CollectibleItem
 from .validators import latitude_validator, longitude_validator
 
 
-class PartialUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("id", "username", "last_name", "first_name")
-
-
 class AthleteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AthleteInfo
@@ -20,7 +14,13 @@ class AthleteInfoSerializer(serializers.ModelSerializer):
         return obj.user__pk
 
 
-class UserSerializer(PartialUserSerializer):
+class PartialUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "username", "last_name", "first_name")
+
+
+class UserListSerializer(PartialUserSerializer):
     type = serializers.SerializerMethodField(method_name="user_type")
     runs_finished = serializers.SerializerMethodField()
 
@@ -88,3 +88,10 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField(write_only=True, required=True)
+
+
+class UserDetailSerializer(UserListSerializer):
+    items = CollectibleItemSerializer(many=True, read_only=True)
+
+    class Meta(UserListSerializer.Meta):
+        fields = UserListSerializer.Meta.fields + ("items",)
