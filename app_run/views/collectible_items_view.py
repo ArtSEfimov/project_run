@@ -89,7 +89,7 @@ class CollectibleItemView(ListAPIView):
 #                                            )
 #
 #         return JsonResponse(data, safe=False)
-class UploadXLSX(APIView):
+class UploadFileView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
