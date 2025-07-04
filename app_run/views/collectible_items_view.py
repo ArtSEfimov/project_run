@@ -18,9 +18,12 @@ class UploadFileView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        input_serializer = FileUploadSerializer(data=request.data)
-        input_serializer.is_valid(raise_exception=True)
-        file_object = input_serializer.validated_data["file"]
+        # input_serializer = FileUploadSerializer(data=request.data)
+        # input_serializer.is_valid(raise_exception=True)
+        # file_object = input_serializer.validated_data["file"]
+
+        file_object = request.FILES.get("file")
+
         # workbook = load_workbook(file_object)
         # worksheet = workbook.active
         #
