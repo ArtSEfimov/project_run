@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Run, AthleteInfo, Challenge, Position, CollectibleItem
+from .models import Run, AthleteInfo, Challenge, Position, CollectableItem
 from .validators import latitude_validator, longitude_validator
 
 
@@ -74,7 +74,7 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class CollectibleItemShowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CollectibleItem
+        model = CollectableItem
         fields = "__all__"
 
 
@@ -82,7 +82,7 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='picture')
 
     class Meta:
-        model = CollectibleItem
+        model = CollectableItem
         exclude = ["picture"]
 
         extra_kwargs = {

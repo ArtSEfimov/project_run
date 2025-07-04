@@ -5,12 +5,12 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..models import CollectibleItem
+from ..models import CollectableItem
 from ..serializers import CollectibleItemSerializer, FileUploadSerializer, CollectibleItemShowSerializer
 
 
 class CollectibleItemView(ListAPIView):
-    queryset = CollectibleItem.objects.all()
+    queryset = CollectableItem.objects.all()
     serializer_class = CollectibleItemShowSerializer
 
 

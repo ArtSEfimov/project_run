@@ -5,7 +5,7 @@ from haversine import Unit, haversine
 
 from rest_framework.viewsets import ModelViewSet
 
-from ..models import Position, CollectibleItem
+from ..models import Position, CollectableItem
 from ..serializers import PositionSerializer
 
 
@@ -17,7 +17,7 @@ class PositionView(ModelViewSet):
 
     @cached_property
     def collectible_items_queryset(self):
-        return CollectibleItem.objects.all()
+        return CollectableItem.objects.all()
 
     def perform_create(self, serializer):
         run_instance = serializer.save()
