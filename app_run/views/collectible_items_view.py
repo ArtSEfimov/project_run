@@ -1,5 +1,5 @@
 import openpyxl
-import validators
+from .validate_url import validate_url
 from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -65,7 +65,7 @@ class UploadFileView(APIView):
             if not type(row[4]) == float or not (-180 <= row[4] <= 180):
                 valid = False
 
-            if not validators.url(row[5]):
+            if not validate_url(row[5]):
                 valid = False
 
             if not valid:
