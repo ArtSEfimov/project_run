@@ -1,15 +1,14 @@
 import openpyxl
-from rest_framework import status
-from rest_framework.response import Response
-
-from .validate_url import validate_url
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .validate_url import validate_url
 from ..models import CollectibleItem
-from ..serializers import CollectibleItemSerializer, FileUploadSerializer
+from ..serializers import CollectibleItemSerializer
 
 
 class CollectibleItemView(ListAPIView):
@@ -93,12 +92,18 @@ class UploadFileView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        file_obj = request.FILES.get('file')
-        if not file_obj:
+
+        file_object = request.FILES.get('file')
+
+        # input_serializer = FileUploadSerializer(data=request.data)
+        # input_serializer.is_valid(raise_exception=True)
+        # file_object = input_serializer.validated_data["file"]
+
+        if not file_object:
             return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Open the workbook
-        workbook = openpyxl.load_workbook(file_obj)
+        workbook = openpyxl.load_workbook(file_object)
 
         # Select the active worksheet
         worksheet = workbook.active
@@ -110,8 +115,16 @@ class UploadFileView(APIView):
             if i == 0:
                 continue
             valid = True
+            row = list(row)[:6]
+            try:
+                row[3] = float(row[3])
+                row[4] = float(row[4])
+            except Exception:
+                valid = False
             types = [str, str, int, float, float, str]
-            for index, sub_row in enumerate(row):
+            for index in range(len(types)):
+                sub_row = row[index]
+                print(sub_row)
                 if type(sub_row) != types[index]:
                     valid = False
 
@@ -124,6 +137,7 @@ class UploadFileView(APIView):
             if not validate_url(row[5]):
                 valid = False
 
+            print(row)
             if not valid:
                 data.append(row)
             else:
