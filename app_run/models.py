@@ -36,7 +36,7 @@ class Position(models.Model):
     # date_time = models.DateTimeField(auto_now_add=True)
 
 
-class CollectableItem(models.Model):
+class CollectibleItem(models.Model):
     name = models.CharField(max_length=50)
     uid = models.CharField(max_length=50)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
