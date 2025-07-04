@@ -101,8 +101,8 @@ class FileUploadSerializer(serializers.Serializer):
 # TODO Если при развернутом просмотре User у предмета item не нужен перечень владельцев этого предмета,
 #  надо сделать новый serializer в котором убрать поле users
 
-# class UserDetailSerializer(UserListSerializer):
-#     items = CollectibleItemSerializer(many=True, read_only=True)
-#
-#     class Meta(UserListSerializer.Meta):
-#         fields = UserListSerializer.Meta.fields + ("items",)
+class UserDetailSerializer(UserListSerializer):
+    items = CollectibleItemShowSerializer(many=True, read_only=True)
+
+    class Meta(UserListSerializer.Meta):
+        fields = UserListSerializer.Meta.fields + ("items",)
