@@ -73,6 +73,9 @@ class UploadFileView(APIView):
             else:
                 to_create.append(row)
 
+        if data:
+            return JsonResponse(data, safe=False)
+
         for item in to_create:
             CollectibleItem.objects.create(name=item[0],
                                            uid=item[1],
@@ -82,5 +85,4 @@ class UploadFileView(APIView):
                                            picture=item[5],
                                            )
 
-        # Return the parsed data as JSON
-        return JsonResponse(data, safe=False)
+
