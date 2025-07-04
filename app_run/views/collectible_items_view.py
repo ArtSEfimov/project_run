@@ -4,7 +4,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 
-from validate_url import is_valid_url
+from .validate_url import is_valid_url
 from ..models import CollectibleItem
 from ..serializers import CollectibleItemSerializer, FileUploadSerializer
 
