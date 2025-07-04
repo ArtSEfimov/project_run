@@ -6,12 +6,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import CollectibleItem
-from ..serializers import CollectibleItemSerializer, FileUploadSerializer
+from ..serializers import CollectibleItemSerializer, FileUploadSerializer, CollectibleItemShowSerializer
 
 
 class CollectibleItemView(ListAPIView):
     queryset = CollectibleItem.objects.all()
-    serializer_class = CollectibleItemSerializer
+    serializer_class = CollectibleItemShowSerializer
 
 
 class UploadFileView(APIView):

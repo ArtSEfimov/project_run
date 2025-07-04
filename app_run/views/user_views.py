@@ -6,7 +6,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .views import UserAnnotatedQuerySet
 from ..models import AthleteInfo
-from ..serializers import UserListSerializer, AthleteInfoSerializer
+from ..serializers import UserListSerializer, AthleteInfoSerializer, UserDetailSerializer
 
 
 class UserPagination(PageNumberPagination):
@@ -21,8 +21,8 @@ class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
     pagination_class = UserPagination
 
     def get_serializer_class(self):
-        # if self.action == "retrieve":
-        #     return UserDetailSerializer
+        if self.action == "retrieve":
+            return UserDetailSerializer
         return UserListSerializer
 
     def get_queryset(self):
