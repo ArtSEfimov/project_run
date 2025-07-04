@@ -144,6 +144,8 @@ class UploadFileView(APIView):
                 to_create.append(row)
 
         for item in to_create:
+            if item[5] is None:
+                continue
             CollectibleItem.objects.create(name=item[0],
                                            uid=item[1],
                                            value=item[2],
