@@ -73,11 +73,12 @@ class PositionSerializer(serializers.ModelSerializer):
 
 
 class CollectibleItemSerializer(serializers.ModelSerializer):
-    url = serializers.URLField(source='picture')
+    # url = serializers.URLField(source='picture')
 
     class Meta:
         model = CollectibleItem
-        exclude = ["picture"]
+        # exclude = ["picture"]
+        fields = "__all__"
         extra_kwargs = {
             "latitude": {
                 "validators": [latitude_validator],
