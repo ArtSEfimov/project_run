@@ -28,9 +28,9 @@ class UploadFileView(APIView):
         workbook = load_workbook(file_object)
         worksheet = workbook.active
 
-        header_row = next(worksheet.iter_rows(min_row=1, max_row=1, values_only=True))
-        headers = list(h.lower() for h in header_row if h is not None)
-        # headers = ["name", "uid", "value", "latitude", "longitude", "url"]
+        # header_row = next(worksheet.iter_rows(min_row=1, max_row=1, values_only=True))
+        # headers = list(h.lower() for h in header_row if h is not None)
+        headers = ["name", "uid", "value", "latitude", "longitude", "url"]
 
         wrong_rows = list()
 
