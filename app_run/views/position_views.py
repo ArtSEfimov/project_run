@@ -20,16 +20,16 @@ class PositionView(ModelViewSet):
         return CollectibleItem.objects.all()
 
     def perform_create(self, serializer):
-        run_instance = serializer.save()
-        self.check_nearby_items(run_instance)
+        position_instance = serializer.save()
+        self.check_nearby_items(position_instance)
 
     def perform_update(self, serializer):
-        run_instance = serializer.save()
-        self.check_nearby_items(run_instance)
+        position_instance = serializer.save()
+        self.check_nearby_items(position_instance)
 
-    def check_nearby_items(self, run_instance):
+    def check_nearby_items(self, position_instance):
         for item in self.collectible_items_queryset:
-            start = run_instance.latitude, run_instance.longitude
-            finish = item.latitude, item.longitude
-            if haversine(start, finish, unit=Unit.METERS) <= 100:
-                item.users.add(run_instance.athlete)
+            user_position = position_instance.latitude, position_instance.longitude
+            item_position = item.latitude, item.longitude
+            if haversine(user_position, item_position, unit=Unit.METERS) <= 100:
+                item.users.add(position_instance.run.athlete)
