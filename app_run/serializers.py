@@ -72,18 +72,18 @@ class PositionSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Забег должен быть только в статусе 'in_progress'")
 
 
-class CollectibleItemShowSerializer(serializers.ModelSerializer):
+class CollectibleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectibleItem
         fields = "__all__"
 
 
-class CollectibleItemSerializer(serializers.ModelSerializer):
+class CollectibleItemValidator(serializers.ModelSerializer):
     url = serializers.URLField(source='picture')
 
     class Meta:
         model = CollectibleItem
-        exclude = ["picture"]
+        fields = ("name", "uid", "value", "latitude", "longitude", "url")
 
         extra_kwargs = {
             "latitude": {
@@ -98,11 +98,12 @@ class CollectibleItemSerializer(serializers.ModelSerializer):
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField(write_only=True, required=True)
 
+
 # TODO Если при развернутом просмотре User у предмета item не нужен перечень владельцев этого предмета,
 #  надо сделать новый serializer в котором убрать поле users
 
 class UserDetailSerializer(UserListSerializer):
-    items = CollectibleItemShowSerializer(many=True, read_only=True)
+    items = CollectibleItemSerializer(many=True, read_only=True)
 
     class Meta(UserListSerializer.Meta):
         fields = UserListSerializer.Meta.fields + ("items",)
