@@ -26,7 +26,7 @@ class UploadFileView(APIView):
         worksheet = workbook.active
 
         header_row = next(worksheet.iter_rows(min_row=1, max_row=1, values_only=True))
-        headers = list(h.lower() for h in header_row if h)
+        headers = list(h.lower() for h in header_row if h is not None)
 
         wrong_rows = list()
 
@@ -35,7 +35,6 @@ class UploadFileView(APIView):
             if row_serializer.is_valid(raise_exception=False):
                 row_serializer.save()
             else:
-                print(row_serializer.errors)
                 wrong_rows.append(list(row))
 
         return Response(wrong_rows, status=status.HTTP_200_OK)
