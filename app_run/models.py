@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class Run(models.Model):
@@ -14,7 +15,7 @@ class Run(models.Model):
     athlete = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.INIT)
     distance = models.FloatField(default=0, blank=True, null=True)
-    # run_time_seconds = models.DateTimeField(default=0)
+    run_time_seconds = models.PositiveBigIntegerField(default=0)
 
 
 class AthleteInfo(models.Model):
@@ -33,7 +34,7 @@ class Position(models.Model):
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
-    # date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField(auto_now_add=True)
 
 
 class CollectibleItem(models.Model):
