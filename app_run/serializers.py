@@ -51,8 +51,12 @@ class ChallengeSerializer(serializers.ModelSerializer):
         read_only_fields = ("full_name", "athlete")
 
 
+_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+
+
 class PositionSerializer(serializers.ModelSerializer):
-    date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%f", read_only=True)
+    date_time = serializers.DateTimeField(format=_DATE_FORMAT,
+                                          input_formats=[_DATE_FORMAT])
 
     class Meta:
         model = Position
