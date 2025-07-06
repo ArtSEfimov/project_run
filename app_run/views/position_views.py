@@ -2,7 +2,6 @@ from functools import cached_property
 
 from django_filters.rest_framework import DjangoFilterBackend
 from haversine import Unit, haversine
-
 from rest_framework.viewsets import ModelViewSet
 
 from ..models import Position, CollectibleItem

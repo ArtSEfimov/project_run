@@ -32,12 +32,14 @@ def get_distance(run_id):
 
 
 def get_run_time(run_id):
-    timestamps = Position.objects.filter(run=run_id).aggregate(min_time=Min("date_time"),
-                                                               max_time=Max("date_time"))
+    points = Position.objects.filter(run=run_id)
+    if points.exists():
+        timestamps = points.aggregate(min_time=Min("date_time"),
+                                      max_time=Max("date_time"))
 
-    start_time = timestamps["min_time"]
-    finish_time = timestamps["max_time"]
-    if start_time is None or finish_time is None:
-        return 0
+        start_time = timestamps["min_time"]
+        finish_time = timestamps["max_time"]
 
-    return (finish_time - start_time).seconds
+        return (finish_time - start_time).seconds
+
+    return 0
