@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class Run(models.Model):
@@ -33,7 +34,7 @@ class Position(models.Model):
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
-    date_time = models.DateTimeField()
+    date_time = models.DateTimeField(default=timezone.now)
 
 
 class CollectibleItem(models.Model):
