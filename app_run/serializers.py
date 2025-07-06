@@ -41,7 +41,7 @@ class RunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Run
         fields = "__all__"
-        read_only_fields = ("status", "distance", "run_time_seconds")
+        read_only_fields = ("status", "distance", "run_time_seconds", "speed")
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
@@ -61,7 +61,7 @@ class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
         fields = "__all__"
-        read_only_fields = ["speed"]
+        read_only_fields = ("speed", "distance")
         extra_kwargs = {
             "latitude":
                 {"validators": [latitude_validator],

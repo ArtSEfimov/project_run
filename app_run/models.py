@@ -16,6 +16,7 @@ class Run(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.INIT)
     distance = models.FloatField(default=0, blank=True, null=True)
     run_time_seconds = models.PositiveBigIntegerField(default=0)
+    speed = models.FloatField(default=0)
 
 
 class AthleteInfo(models.Model):
@@ -35,7 +36,8 @@ class Position(models.Model):
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
     date_time = models.DateTimeField(default=timezone.now)
-    speed = models.PositiveIntegerField(default=0)
+    speed = models.FloatField(default=0)
+    distance = models.FloatField(default=0)
 
 
 class CollectibleItem(models.Model):
