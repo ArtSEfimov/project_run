@@ -20,13 +20,13 @@ class PositionView(ModelViewSet):
 
     def perform_create(self, serializer):
         speed = self.calculate_speed(serializer)
-        distance = self.calculate_distance(serializer)
+        distance = self.get_overall_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
         self.check_nearby_items(position_instance)
 
     def perform_update(self, serializer):
         speed = self.calculate_speed(serializer)
-        distance = self.calculate_distance(serializer)
+        distance = self.get_overall_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
         self.check_nearby_items(position_instance)
 
