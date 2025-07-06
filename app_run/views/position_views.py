@@ -1,6 +1,5 @@
 from functools import cached_property
 
-from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from haversine import Unit, haversine
 from rest_framework.viewsets import ModelViewSet
@@ -21,13 +20,13 @@ class PositionView(ModelViewSet):
 
     def perform_create(self, serializer):
         speed = self.calculate_speed(serializer)
-        distance = self.calculate_distance(serializer) + self.get_overall_distance()
+        distance = self.calculate_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
         self.check_nearby_items(position_instance)
 
     def perform_update(self, serializer):
         speed = self.calculate_speed(serializer)
-        distance = self.calculate_distance(serializer) + self.get_overall_distance()
+        distance = self.calculate_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
         self.check_nearby_items(position_instance)
 
@@ -37,9 +36,6 @@ class PositionView(ModelViewSet):
             item_position = item.latitude, item.longitude
             if haversine(user_position, item_position, unit=Unit.METERS) <= 100:
                 item.users.add(position_instance.run.athlete)
-
-    def get_overall_distance(self):
-        return self.queryset.aggregate(distance=Sum("distance"))["distance"]
 
     def calculate_distance(self, serializer):
         current_point_latitude = serializer.validated_data["latitude"]
@@ -52,7 +48,7 @@ class PositionView(ModelViewSet):
 
         previous_position = previous_point.latitude, previous_point.longitude
 
-        return haversine(current_position, previous_position, unit=Unit.METERS)
+        return haversine(current_position, previous_position, unit=Unit.METERS) + previous_point.distance
 
     def calculate_speed(self, serializer):
         current_point_date_time = serializer.validated_data["date_time"]
