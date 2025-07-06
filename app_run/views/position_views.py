@@ -48,7 +48,14 @@ class PositionView(ModelViewSet):
 
         previous_position = previous_point.latitude, previous_point.longitude
 
-        return haversine(current_position, previous_position, unit=Unit.METERS) + previous_point.distance
+        return haversine(current_position, previous_position, unit=Unit.METERS)
+
+    def get_overall_distance(self, serializer):
+        distance = self.calculate_distance(serializer)
+        previous_point, is_exists = self.get_previous_position()
+        if not is_exists:
+            return distance
+        return distance + previous_point.distance
 
     def calculate_speed(self, serializer):
         current_point_date_time = serializer.validated_data["date_time"]
