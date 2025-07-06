@@ -37,5 +37,7 @@ def get_run_time(run_id):
 
     start_time = timestamps["min_time"]
     finish_time = timestamps["max_time"]
+    if start_time is None or finish_time is None:
+        return 0
 
     return (finish_time - start_time).seconds
