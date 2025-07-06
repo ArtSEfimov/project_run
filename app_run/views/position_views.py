@@ -55,7 +55,7 @@ class PositionView(ModelViewSet):
 
         previous_position = previous_point.latitude, previous_point.longitude
 
-        return haversine(current_position, previous_position, unit=Unit.METERS)
+        return haversine(current_position, previous_position, unit=Unit.KILOMETERS)
 
     def get_overall_distance(self, serializer):
         distance = self.calculate_distance(serializer)
@@ -73,7 +73,7 @@ class PositionView(ModelViewSet):
 
         time_delta_seconds = (current_point_date_time - previous_point.date_time).seconds
 
-        return round(self.calculate_distance(serializer) / time_delta_seconds, 2)
+        return round((self.calculate_distance(serializer) * 1000) / time_delta_seconds, 2)
 
     @cached_property
     def _previous_position(self) -> Position | None:
