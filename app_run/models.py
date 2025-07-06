@@ -33,7 +33,7 @@ class Position(models.Model):
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField()
 
 
 class CollectibleItem(models.Model):
