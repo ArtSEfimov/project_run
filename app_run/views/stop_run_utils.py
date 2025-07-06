@@ -29,7 +29,8 @@ def get_cached_points(run_id):
     points = cache.get(key, None)
     if points is None:
         points = Position.objects.filter(run=run_id)
-        cache.set(key, points, timeout=_CACHE_TIMEOUT)
+        if points.exists():
+            cache.set(key, points, timeout=_CACHE_TIMEOUT)
 
     return points
 

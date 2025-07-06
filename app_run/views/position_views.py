@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from haversine import Unit, haversine
 from rest_framework.viewsets import ModelViewSet
 
+from .stop_run_utils import get_cached_points
 from ..models import Position, CollectibleItem
 from ..serializers import PositionSerializer
 
@@ -14,17 +15,23 @@ class PositionView(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["run"]
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.run_object = None
+
     @cached_property
     def collectible_items_queryset(self):
         return CollectibleItem.objects.all()
 
     def perform_create(self, serializer):
+        self.run_object = serializer.validated_data["run"]
         speed = self.calculate_speed(serializer)
         distance = self.get_overall_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
         self.check_nearby_items(position_instance)
 
     def perform_update(self, serializer):
+        self.run_object = serializer.validated_data["run"]
         speed = self.calculate_speed(serializer)
         distance = self.get_overall_distance(serializer)
         position_instance = serializer.save(speed=speed, distance=distance)
@@ -42,8 +49,8 @@ class PositionView(ModelViewSet):
         current_point_longitude = serializer.validated_data["longitude"]
         current_position = current_point_latitude, current_point_longitude
 
-        previous_point, is_exists = self.get_previous_position()
-        if not is_exists:
+        previous_point = self._previous_position
+        if not previous_point:
             return 0
 
         previous_position = previous_point.latitude, previous_point.longitude
@@ -52,24 +59,27 @@ class PositionView(ModelViewSet):
 
     def get_overall_distance(self, serializer):
         distance = self.calculate_distance(serializer)
-        previous_point, is_exists = self.get_previous_position()
-        if not is_exists:
+        previous_point = self._previous_position
+        if not previous_point:
             return distance
         return distance + previous_point.distance
 
     def calculate_speed(self, serializer):
         current_point_date_time = serializer.validated_data["date_time"]
 
-        previous_point, is_exists = self.get_previous_position()
-        if not is_exists:
+        previous_point = self._previous_position
+        if not previous_point:
             return 0
 
         time_delta_seconds = (current_point_date_time - previous_point.date_time).seconds
 
         return round(self.calculate_distance(serializer) / time_delta_seconds, 2)
 
-    def get_previous_position(self) -> (Position, bool):
-        if self.queryset.exists():
-            point = self.queryset.latest("date_time")
-            return point, True
-        return None, False
+    @cached_property
+    def _previous_position(self) -> Position | None:
+        points = get_cached_points(self.run_object.pk)
+        if points:
+            previous_point = points.latest("date_time")
+            return previous_point
+
+        return None
