@@ -35,6 +35,7 @@ class Position(models.Model):
     latitude = models.DecimalField(default=0, decimal_places=4, max_digits=6)
     longitude = models.DecimalField(default=0, decimal_places=4, max_digits=7)
     date_time = models.DateTimeField(default=timezone.now)
+    speed = models.PositiveIntegerField(default=0)
 
 
 class CollectibleItem(models.Model):

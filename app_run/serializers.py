@@ -61,6 +61,7 @@ class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
         fields = "__all__"
+        read_only_fields = ["speed"]
         extra_kwargs = {
             "latitude":
                 {"validators": [latitude_validator],
