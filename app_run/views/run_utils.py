@@ -1,4 +1,4 @@
-from django.db.models import Sum
+from django.db.models import Sum, Min, Max
 from haversine import haversine
 
 from ..models import Challenge, Position, Run
@@ -32,4 +32,10 @@ def get_distance(run_id):
 
 
 def get_run_time(run_id):
-    pass
+    timestamps = Position.objects.filter(run=run_id).aggregate(min_time=Min("date_time"),
+                                                               max_time=Max("date_time"))
+
+    start_time = timestamps["min_time"]
+    finish_time = timestamps["max_time"]
+
+    return (finish_time - start_time).seconds
