@@ -3,7 +3,7 @@ from django.db.models import Min, Max, Avg
 
 from ..models import Position
 
-_CACHE_TIMEOUT = 60
+_CACHE_TIMEOUT_SECONDS = 60
 
 
 def get_cached_points(run_id):
@@ -12,7 +12,7 @@ def get_cached_points(run_id):
     if points is None:
         points = Position.objects.filter(run=run_id)
         if points.exists():
-            cache.set(key, points, timeout=_CACHE_TIMEOUT)
+            cache.set(key, points, timeout=_CACHE_TIMEOUT_SECONDS)
 
     return points
 
@@ -24,17 +24,6 @@ def get_distance(run_id):
         return last_point.distance
 
     return 0
-
-
-# def get_distance(run_id):
-#     points = get_cached_points(run_id)
-#     distance = 0
-#     for i in range(len(points) - 1):
-#         start = points[i].latitude, points[i].longitude
-#         finish = points[i + 1].latitude, points[i + 1].longitude
-#         distance += haversine(start, finish)
-#
-#     return distance
 
 
 def get_run_time(run_id):

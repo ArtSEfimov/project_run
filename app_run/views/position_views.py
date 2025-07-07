@@ -4,7 +4,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from haversine import Unit, haversine
 from rest_framework.viewsets import ModelViewSet
 
-from .stop_run_utils import get_cached_points
 from ..models import Position, CollectibleItem
 from ..serializers import PositionSerializer
 
@@ -77,7 +76,7 @@ class PositionView(ModelViewSet):
 
     @cached_property
     def _previous_position(self) -> Position | None:
-        points = get_cached_points(self.run_object.pk)
+        points = Position.objects.filter(run=self.run_object)
         if points:
             previous_point = points.latest("date_time")
             return previous_point
