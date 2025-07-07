@@ -1,25 +1,8 @@
 from django.core.cache import cache
-from django.db.models import Sum, Min, Max, Avg
+from django.db.models import Min, Max, Avg
 from haversine import haversine
 
-from ..models import Challenge, Position, Run
-from ..views.user_views import UserAnnotatedQuerySet
-
-_CHALLENGE_10_RUNS = "Сделай 10 Забегов!"
-_CHALLENGE_50_KM = "Пробеги 50 километров!"
-
-
-def check_10_runs_challenge(run_id):
-    user = UserAnnotatedQuerySet.queryset.get(run=run_id)
-    if user.runs_finished % 10 == 0:
-        Challenge.objects.create(full_name=_CHALLENGE_10_RUNS, athlete=user)
-
-
-def check_50_km_challenge(user_id):
-    user_distance = Run.objects.filter(athlete=user_id).aggregate(total_distance=Sum("distance"))
-    if user_distance["total_distance"] >= 50:
-        Challenge.objects.get_or_create(full_name=_CHALLENGE_50_KM, athlete_id=user_id)
-
+from ..models import Position
 
 _CACHE_TIMEOUT = 60
 

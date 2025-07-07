@@ -4,7 +4,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .stop_run_utils import check_10_runs_challenge, get_distance, check_50_km_challenge, get_run_time, get_avg_speed
+from .challenge_checkers import check_10_runs_challenge, check_50_km_challenge, check_2_km_in_10_minutes_challenge
+from .stop_run_utils import get_distance, get_run_time, get_avg_speed
 from ..models import Run
 
 
@@ -29,9 +30,6 @@ class StopView(APIView):
 
         run.status = Run.Status.FINISHED
 
-        # check 10 runs challenge
-        check_10_runs_challenge(run.pk)
-
         # calculate distance
         run.distance = get_distance(run.pk)
 
@@ -43,7 +41,13 @@ class StopView(APIView):
 
         run.save()
 
-        # check 50_km challenge
+        # check 10 runs challenge
+        check_10_runs_challenge(run.pk)
+
+        # check 50 km challenge
         check_50_km_challenge(run.athlete.pk)
+
+        # check 2 km in 10 minutes challenge
+        check_2_km_in_10_minutes_challenge(run)
 
         return Response(model_to_dict(run), status=status.HTTP_200_OK)
