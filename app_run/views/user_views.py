@@ -19,7 +19,7 @@ class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
     search_fields = ("first_name", "last_name")
     ordering_fields = ["date_joined"]
     pagination_class = UserPagination
-    lookup_field = "id"
+    lookup_url_kwarg = "id"
 
     def get_serializer_class(self):
         if self.action == "retrieve":
