@@ -36,6 +36,11 @@ class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
 
         return qs.exclude(is_superuser=True)
 
+    def get_serializer_context(self):
+        user_object = self.get_object()
+        ctx = super().get_serializer_context()
+        ctx["user"] = user_object
+
 
 class AthleteInfoView(UserAnnotatedQuerySet, GenericAPIView, RetrieveModelMixin, UpdateModelMixin):
     serializer_class = AthleteInfoSerializer

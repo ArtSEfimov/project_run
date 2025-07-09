@@ -23,6 +23,7 @@ from app_run.views.collectible_items_view import CollectibleItemView, UploadFile
 from app_run.views.position_views import PositionView
 from app_run.views.run_views import RunViewSet
 from app_run.views.start_stop_views import StartView, StopView
+from app_run.views.subscribe_view import SubscribeCreateView
 from app_run.views.user_views import UserViewSet, AthleteInfoView
 from app_run.views.views import company_info
 
@@ -41,4 +42,5 @@ urlpatterns = [
     path("api/challenges/", get_challenge_info, name="challenge_info"),
     path("api/collectible_item/", CollectibleItemView.as_view(), name="collectible_item"),
     path("api/upload_file/", UploadFileView.as_view(), name="upload_file"),
+    path("api/subscribe_to_coach/<int:id>/", SubscribeCreateView.as_view(), name="subscribe_to_coach"),
 ]

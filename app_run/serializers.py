@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Run, AthleteInfo, Challenge, Position, CollectibleItem
+from .models import Run, AthleteInfo, Challenge, Position, CollectibleItem, Subscribe
 from .validators import latitude_validator, longitude_validator
 
 
@@ -106,6 +106,24 @@ class FileUploadSerializer(serializers.Serializer):
 
 class UserDetailSerializer(UserListSerializer):
     items = CollectibleItemSerializer(many=True, read_only=True)
+    athletes = serializers.PrimaryKeyRelatedField(read_only=True, many=True, source="coach_subscribe__athlete")
+    coach = serializers.PrimaryKeyRelatedField(read_only=True, many=True, source="athlete_subscribe__coach")
 
     class Meta(UserListSerializer.Meta):
         fields = UserListSerializer.Meta.fields + ("items",)
+
+    def get_fields(self):
+        fields = super().get_fields()
+        user = self.context.get("user")
+        if user.is_staff:
+            fields["athletes"] = self.athletes
+        else:
+            fields["coach"] = self.coach
+
+        return fields
+
+
+class SubscribeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscribe
+        fields = "__all__"
