@@ -30,4 +30,4 @@ _10_MINUTES_IN_SECONDS = 600
 
 def check_2_km_in_10_minutes_challenge(run):
     if run.distance >= _2_KM and run.run_time_seconds <= _10_MINUTES_IN_SECONDS:
-        Challenge.objects.get_or_create(full_name=_CHALLENGE_2_KM_IN_10_MINUTES, athlete_id=run.athlete.pk)
+        Challenge.objects.get_or_create(full_name=_CHALLENGE_2_KM_IN_10_MINUTES, athlete_id=run.athlete_id)
