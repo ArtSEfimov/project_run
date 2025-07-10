@@ -130,4 +130,8 @@ class UserDetailSerializer(UserListSerializer):
         return obj.coach_subscribes.values_list("athlete_id", flat=True)
 
     def get_coach(self, obj):
-        return obj.athlete_subscribes.values_list("coach_id", flat=True)
+        coaches = obj.athlete_subscribes.all()
+        if coaches.exists():
+            return coaches.first().coach.pk
+
+        return None
