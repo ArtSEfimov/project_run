@@ -18,6 +18,7 @@ class SubscribeCreateView(APIView):
         if not athlete.exists():
             return Response({"message": "athlete not found"}, status=status.HTTP_400_BAD_REQUEST)
 
+        athlete = athlete.first()
         subscribe = Subscribe.objects.filter(athlete=athlete, coach=coach)
         if subscribe.exists():
             return Response({"message": "subscribe already exists"}, status=status.HTTP_400_BAD_REQUEST)
