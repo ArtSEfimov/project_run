@@ -14,7 +14,7 @@ class SubscribeCreateView(APIView):
         athlete_id = request.data.get('athlete')
         coach_id = self.kwargs.get('id')
 
-        coach = get_object_or_404(User, id=coach_id)
+        coach = get_object_or_404(User, id=coach_id, is_staff=True)
         athletes = User.objects.filter(id=athlete_id, is_staff=False)
         if not athletes.exists():
             return Response({"message": "athlete not found"}, status=status.HTTP_400_BAD_REQUEST)
