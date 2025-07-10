@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from app_run.views.challenge_view import get_challenge_info
+from app_run.views.challenges_summary_views import ChallengesSummaryView
 from app_run.views.collectible_items_view import CollectibleItemView, UploadFileView
 from app_run.views.position_views import PositionView
 from app_run.views.run_views import RunViewSet
@@ -43,4 +44,6 @@ urlpatterns = [
     path("api/collectible_item/", CollectibleItemView.as_view(), name="collectible_item"),
     path("api/upload_file/", UploadFileView.as_view(), name="upload_file"),
     path("api/subscribe_to_coach/<int:id>/", SubscribeCreateView.as_view(), name="subscribe_to_coach"),
+    path("api/challenges_summary/", ChallengesSummaryView.as_view(), name="challenges_summary"),
+
 ]

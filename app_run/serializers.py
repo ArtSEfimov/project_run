@@ -135,3 +135,17 @@ class UserDetailSerializer(UserListSerializer):
             return coaches.first().coach.pk
 
         return None
+
+
+class UserChallengeSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    full_name = serializers.SerializerMethodField(read_only=True)
+    username = serializers.CharField(read_only=True)
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+
+class ChallengeListSerializer(serializers.Serializer):
+    name_to_display = serializers.CharField(source="full_name")
+    athletes = UserChallengeSerializer(many=True, read_only=True)
