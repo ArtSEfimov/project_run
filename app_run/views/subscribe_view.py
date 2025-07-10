@@ -15,15 +15,15 @@ class SubscribeCreateView(APIView):
         coach_id = self.kwargs.get('id')
 
         coach = get_object_or_404(User, id=coach_id)
-        athlete = User.objects.filter(id=athlete_id, is_staff=False)
-        if not athlete.exists():
+        athletes = User.objects.filter(id=athlete_id, is_staff=False)
+        if not athletes.exists():
             return Response({"message": "athlete not found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        athlete = athlete.first()
-        subscribe = Subscribe.objects.filter(athlete=athlete, coach=coach)
-        if subscribe.exists():
+        athlete = athletes.first()
+        subscribes = Subscribe.objects.filter(athlete=athlete, coach=coach)
+        if subscribes.exists():
             return Response({"message": "subscribe already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-        created_instance = Subscribe.objects.create(athlete=athlete, coach=coach)
-        serializer = SubscribeSerializer(data=created_instance)
+        subscribe = Subscribe.objects.create(athlete=athlete, coach=coach)
+        serializer = SubscribeSerializer(instance=subscribe)
         return Response(serializer.data, status=status.HTTP_200_OK)
