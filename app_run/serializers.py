@@ -106,8 +106,8 @@ class FileUploadSerializer(serializers.Serializer):
 
 class UserDetailSerializer(UserListSerializer):
     items = CollectibleItemSerializer(many=True, read_only=True)
-    athletes = serializers.PrimaryKeyRelatedField(read_only=True, many=True, source="coach_subscribe__athlete")
-    coach = serializers.PrimaryKeyRelatedField(read_only=True, many=True, source="athlete_subscribe__coach")
+    athletes = serializers.SerializerMethodField(read_only=True)
+    coach = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserListSerializer.Meta):
         fields = UserListSerializer.Meta.fields + ("items",)
@@ -121,6 +121,12 @@ class UserDetailSerializer(UserListSerializer):
             fields["coach"] = self.coach
 
         return fields
+
+    def get_athletes(self, obj):
+        return obj.coach_subscribes.values_list("athlete_id", flat=True)
+
+    def get_coach(self, obj):
+        return obj.athlete_subscribes.values_list("coach_id", flat=True)
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
