@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,12 +14,13 @@ class ChallengesSummaryView(APIView):
         response = list()
         for user in queryset:
             for challenge in user.challenges.all():
-                if challenge in response:
-                    if user not in response[response.index(challenge)]:
-                        response[response.index(challenge)].append(user)
+                challenge_full_name = challenge.full_name
+                if challenge.full_name in response:
+                    if user not in response[response.index(challenge.full_name)]:
+                        response[response.index(challenge.full_name)].append(user)
                 else:
-                    response.append(challenge)
+                    response.append(challenge.full_name)
                     response[-1] = [user]
 
         serializer = ChallengeListSerializer(response, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
