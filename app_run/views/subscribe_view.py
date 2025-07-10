@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app_run.models import Subscribe
+from app_run.serializers import SubscribeSerializer
 
 
 class SubscribeCreateView(APIView):
@@ -23,5 +24,6 @@ class SubscribeCreateView(APIView):
         if subscribe.exists():
             return Response({"message": "subscribe already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-        Subscribe.objects.create(athlete=athlete, coach=coach)
-        return Response(status=status.HTTP_200_OK)
+        created_instance = Subscribe.objects.create(athlete=athlete, coach=coach)
+        serializer = SubscribeSerializer(data=created_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
