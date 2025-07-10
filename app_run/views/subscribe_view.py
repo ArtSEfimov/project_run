@@ -18,10 +18,11 @@ class SubscribeCreateView(APIView):
         if not coach.is_staff:
             return Response({"message": "user is not a coach"}, status=status.HTTP_400_BAD_REQUEST)
 
-        athlete = get_object_or_404(User, id=athlete_id)
-        if athlete.is_staff:
-            return Response({"message": "user is not an athlete"}, status=status.HTTP_400_BAD_REQUEST)
+        athletes = User.objects.filter(id=athlete_id, is_staff=False)
+        if not athletes.exists():
+            return Response({"message": "athlete not found"}, status=status.HTTP_400_BAD_REQUEST)
 
+        athlete = athletes.first()
         subscribes = Subscribe.objects.filter(athlete=athlete, coach=coach)
         if subscribes.exists():
             return Response({"message": "subscribe already exists"}, status=status.HTTP_400_BAD_REQUEST)
