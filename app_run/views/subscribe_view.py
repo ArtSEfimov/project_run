@@ -24,4 +24,4 @@ class SubscribeCreateView(APIView):
             return Response({"message": "subscribe already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
         Subscribe.objects.create(athlete=athlete, coach=coach)
-        return Response({"message": "subscribe created successfully"}, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
