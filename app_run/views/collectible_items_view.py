@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import CollectibleItem
-from ..serializers import CollectibleItemValidator, FileUploadSerializer, CollectibleItemSerializer
+from ..serializers.serializers import CollectibleItemValidator, FileUploadSerializer, CollectibleItemSerializer
 
 
 class CollectibleItemView(ListAPIView):

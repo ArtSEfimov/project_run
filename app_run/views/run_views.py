@@ -4,7 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 
 from ..models import Run
-from ..serializers import RunSerializer
+from ..serializers.serializers import RunSerializer
 
 
 class RunPagination(PageNumberPagination):

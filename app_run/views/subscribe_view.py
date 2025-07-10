@@ -4,8 +4,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from app_run.models import Subscribe
-from app_run.serializers import SubscribeSerializer
+from ..models import Subscribe
+from ..serializers.serializers import SubscribeSerializer
 
 
 class SubscribeCreateView(APIView):
