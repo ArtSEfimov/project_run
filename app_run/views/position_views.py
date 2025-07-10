@@ -5,7 +5,7 @@ from haversine import Unit, haversine
 from rest_framework.viewsets import ModelViewSet
 
 from ..models import Position, CollectibleItem
-from ..serializers.serializers import PositionSerializer
+from ..serializers import PositionSerializer
 
 
 class PositionView(ModelViewSet):

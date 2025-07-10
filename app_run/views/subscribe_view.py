@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Subscribe
-from ..serializers.serializers import SubscribeSerializer
+from ..serializers import SubscribeSerializer
 
 
 class SubscribeCreateView(APIView):
