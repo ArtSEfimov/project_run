@@ -106,8 +106,6 @@ class FileUploadSerializer(serializers.Serializer):
 
 class UserDetailSerializer(UserListSerializer):
     items = CollectibleItemSerializer(many=True, read_only=True)
-    athletes = serializers.SerializerMethodField(read_only=True)
-    coach = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserListSerializer.Meta):
         fields = UserListSerializer.Meta.fields + ("items",)
@@ -116,9 +114,9 @@ class UserDetailSerializer(UserListSerializer):
         fields = super().get_fields()
         user = self.context.get("user")
         if user.is_staff:
-            fields["athletes"] = self.athletes
+            fields["athletes"] = serializers.SerializerMethodField(read_only=True)
         else:
-            fields["coach"] = self.coach
+            fields["coach"] = serializers.SerializerMethodField(read_only=True)
 
         return fields
 
