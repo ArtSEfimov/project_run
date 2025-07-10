@@ -20,7 +20,7 @@ class ChallengesSummaryView(APIView):
                         response[response.index(challenge.full_name)].append(user)
                 else:
                     response.append(challenge.full_name)
-                    response[-1] = [user]
+                    response[-1].append([user])
 
         serializer = ChallengeListSerializer(response, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
