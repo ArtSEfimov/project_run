@@ -6,9 +6,14 @@ from .validators import latitude_validator, longitude_validator
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "username", "last_name", "first_name")
+        fields = ("id", "username", "last_name", "first_name", "rating")
+
+    def get_rating(self, obj):
+        return obj.rating
 
 
 class CollectibleItemSerializer(serializers.ModelSerializer):
@@ -93,7 +98,7 @@ class FileUploadSerializer(serializers.Serializer):
 class SubscribeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscribe
-        fields = "__all__"
+        exclude = ("score",)
 
 
 class UserListSerializer(PartialUserSerializer):
@@ -120,9 +125,9 @@ class UserDetailSerializer(UserListSerializer):
         fields = super().get_fields()
         user = self.context.get("user")
         if user.is_staff:
-            fields["athletes"] = serializers.SerializerMethodField(read_only=True)
+            fields["athletes"] = serializers.SerializerMethodField()
         else:
-            fields["coach"] = serializers.SerializerMethodField(read_only=True)
+            fields["coach"] = serializers.SerializerMethodField()
 
         return fields
 
@@ -139,7 +144,7 @@ class UserDetailSerializer(UserListSerializer):
 
 class UserChallengeSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    full_name = serializers.SerializerMethodField(read_only=True)
+    full_name = serializers.SerializerMethodField()
     username = serializers.CharField(read_only=True)
 
     def get_full_name(self, obj):

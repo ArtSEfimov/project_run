@@ -1,0 +1,35 @@
+from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ..models import Subscribe
+from ..serializers import SubscribeSerializer
+
+
+class RateCoachView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        athlete_id = request.data.get("athlete")
+        score = request.data.get("rating")
+
+        coach_id = self.kwargs.get("coach_id")
+
+        if score > 5 or score < 1:
+            return Response({"message": "score value must be in the range 1 to 5."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        athlete = get_object_or_404(User, id=athlete_id)
+        coach = get_object_or_404(User, id=coach_id)
+
+        subscribes = Subscribe.objects.filter(athlete=athlete, coach=coach)
+        if not subscribes.exists():
+            return Response({"message": "subscribe does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        subscribe = subscribes.first()
+        subscribe.score = score
+        subscribe.save()
+
+        serializer = SubscribeSerializer(instance=subscribe)
+        return Response(serializer.data, status=status.HTTP_200_OK)

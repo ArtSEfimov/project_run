@@ -53,3 +53,4 @@ class CollectibleItem(models.Model):
 class Subscribe(models.Model):
     athlete = models.ForeignKey(User, on_delete=models.CASCADE, related_name="athlete_subscribes")
     coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coach_subscribes")
+    score = models.PositiveSmallIntegerField(null=True, default=None)

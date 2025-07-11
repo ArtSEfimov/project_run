@@ -11,8 +11,8 @@ from ..serializers import SubscribeSerializer
 class SubscribeCreateView(APIView):
 
     def post(self, request, *args, **kwargs):
-        athlete_id = request.data.get('athlete')
-        coach_id = self.kwargs.get('id')
+        athlete_id = request.data.get("athlete")
+        coach_id = self.kwargs.get("id")
 
         coach = get_object_or_404(User, id=coach_id)
         if not coach.is_staff:

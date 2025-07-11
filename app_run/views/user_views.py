@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Avg
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
@@ -35,12 +36,13 @@ class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
             elif user_type == "coach":
                 qs = qs.filter(is_staff=True)
 
-        return qs.exclude(is_superuser=True)
+        return qs.exclude(is_superuser=True).annotate(rating=Avg("coach_subscribes__score"))
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         if self.action == "retrieve":
             ctx["user"] = self.get_object()
+
         return ctx
 
 
