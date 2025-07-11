@@ -16,8 +16,13 @@ class RateCoachView(APIView):
 
         coach_id = self.kwargs.get("coach_id")
 
-        athlete = get_object_or_404(User, id=athlete_id)
         coach = get_object_or_404(User, id=coach_id)
+
+        athletes = User.objects.filter(id=athlete_id)
+        if not athletes.exists():
+            return Response({"message": "athlete not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        athlete = athletes.first()
 
         if not isinstance(score, int):
             return Response({"message": "Score must be an integer"},
