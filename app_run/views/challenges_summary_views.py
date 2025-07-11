@@ -21,13 +21,21 @@ class ChallengesSummaryView(APIView):
                 else:
                     challenges[challenge_full_name] = [user]
 
-        serializer = ChallengeListSerializer(challenges, many=True)
+        to_repr = list()
+        for k, v in challenges.items():
+            obj = dict()
+            obj["full_name"] = k
+            obj["athletes"] = v.copy()
+            to_repr.append(obj)
+
+        serializer = ChallengeListSerializer(to_repr, many=True)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 note = [
     {
-        "name_to_display": "Challenge_name",
+        "full_name": "Challenge_name",
         "athletes": [
             {"id": 1,
              "full_name": "FULLNAME",
