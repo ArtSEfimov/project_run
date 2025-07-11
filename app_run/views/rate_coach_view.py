@@ -16,15 +16,15 @@ class RateCoachView(APIView):
 
         coach_id = self.kwargs.get("coach_id")
 
+        athlete = get_object_or_404(User, id=athlete_id)
+        coach = get_object_or_404(User, id=coach_id)
+
         if not isinstance(score, int):
             return Response({"message": "Score must be an integer"},
                             status=status.HTTP_400_BAD_REQUEST)
         if score > 5 or score < 1:
             return Response({"message": "score value must be in the range 1 to 5."},
                             status=status.HTTP_400_BAD_REQUEST)
-
-        athlete = get_object_or_404(User, id=athlete_id)
-        coach = get_object_or_404(User, id=coach_id)
 
         subscribes = Subscribe.objects.filter(athlete=athlete, coach=coach)
         if not subscribes.exists():
