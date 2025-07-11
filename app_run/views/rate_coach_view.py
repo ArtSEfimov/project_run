@@ -11,20 +11,23 @@ from ..serializers import SubscribeSerializer
 class RateCoachView(APIView):
 
     def post(self, request, *args, **kwargs):
-        athlete_id = request.data.get("athlete")
-        score = request.data.get("rating")
+        athlete_id = request.data.get("athlete", None)
+        score = request.data.get("rating", None)
 
         coach_id = self.kwargs.get("coach_id")
 
         coach = get_object_or_404(User, id=coach_id)
 
+        if athlete_id is None:
+            return Response({"message": "athlete_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
         athletes = User.objects.filter(id=athlete_id)
         if not athletes.exists():
-            return Response({"message": "athlete not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "athlete not found"}, status=status.HTTP_400_BAD_REQUEST)
 
         athlete = athletes.first()
 
-        if not isinstance(score, int):
+        if score is None or not isinstance(score, int):
             return Response({"message": "Score must be an integer"},
                             status=status.HTTP_400_BAD_REQUEST)
         if score > 5 or score < 1:
