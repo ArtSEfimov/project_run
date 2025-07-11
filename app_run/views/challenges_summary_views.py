@@ -11,16 +11,28 @@ class ChallengesSummaryView(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all().prefetch_related("challenges")
 
-        response = list()
+        challenges = dict()
         for user in queryset:
             for challenge in user.challenges.all():
                 challenge_full_name = challenge.full_name
-                if challenge.full_name in response:
-                    if user not in response[response.index(challenge.full_name)]:
-                        response[response.index(challenge.full_name)].append(user)
+                if challenge_full_name in challenges:
+                    if user not in challenges[challenge_full_name]:
+                        challenges[challenge_full_name].append(user)
                 else:
-                    response.append(challenge.full_name)
-                    response[-1].append([user])
+                    challenges[challenge_full_name] = [user]
 
-        serializer = ChallengeListSerializer(response, many=True)
+        serializer = ChallengeListSerializer(challenges, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+note = [
+    {
+        "name_to_display": "Challenge_name",
+        "athletes": [
+            {"id": 1,
+             "full_name": "FULLNAME",
+             "username": "USERNAME",
+             },
+        ],
+    },
+]
