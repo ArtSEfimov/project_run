@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+from app_run.views.analytics_for_coach_view import AnalyticsForCoachViewSet
 from app_run.views.challenge_view import get_challenge_info
 from app_run.views.challenges_summary_views import ChallengesSummaryView
 from app_run.views.collectible_items_view import CollectibleItemView, UploadFileView
@@ -47,6 +48,6 @@ urlpatterns = [
     path("api/subscribe_to_coach/<int:id>/", SubscribeCreateView.as_view(), name="subscribe_to_coach"),
     path("api/challenges_summary/", ChallengesSummaryView.as_view(), name="challenges_summary"),
     path("api/rate_coach/<int:coach_id>/", RateCoachView.as_view(), name="rate_coach"),
-    path("api/analytics_for_coach/<int:coach_id>/", RateCoachView.as_view(), name="analytics_for_coach"),
+    path("api/analytics_for_coach/<int:coach_id>/", AnalyticsForCoachViewSet.as_view(), name="analytics_for_coach"),
 
 ]
