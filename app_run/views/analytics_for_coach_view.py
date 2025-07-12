@@ -9,7 +9,7 @@ class AnalyticsForCoachViewSet(APIView):
     def get(self, request, coach_id):
         athletes = (
             User.objects.filter(athlete_subscribes__coach=coach_id)
-            .annotate(msx_distance=Max("run__distance"))
+            .annotate(max_distance=Max("run__distance"))
             .annotate(sum_distance=Sum("run__distance"))
             .annotate(avg_speed=Avg("run__speed"))
         )
