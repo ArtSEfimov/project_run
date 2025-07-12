@@ -27,7 +27,7 @@ class AnalyticsForCoachViewSet(APIView):
         response = {
             'longest_run_user': max_distance_athlete.pk,  # Id Бегуна, который сделал самый длинный забег у этого Тренера
 
-            'longest_run_value': max_distance_athlete.msx_distance,  # Дистанция самого длинного забега
+            'longest_run_value': max_distance_athlete.max_distance,  # Дистанция самого длинного забега
 
             'total_run_user': sum_distance_athlete.pk,  # Id Бегуна, который пробежал в сумме больше всех у этого Тренера
 
