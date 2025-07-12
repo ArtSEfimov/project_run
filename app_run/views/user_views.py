@@ -42,7 +42,7 @@ class UserViewSet(UserAnnotatedQuerySet, ReadOnlyModelViewSet):
         ctx = super().get_serializer_context()
         if self.action == "retrieve":
             ctx["user"] = self.get_object()
-
+        ctx["rating"] = True
         return ctx
 
 

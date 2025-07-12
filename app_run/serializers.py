@@ -6,14 +6,16 @@ from .validators import latitude_validator, longitude_validator
 
 
 class PartialUserSerializer(serializers.ModelSerializer):
-    rating = serializers.SerializerMethodField()
-
     class Meta:
         model = User
-        fields = ("id", "username", "last_name", "first_name", "rating")
+        fields = ("id", "username", "last_name", "first_name")
 
-    def get_rating(self, obj):
-        return getattr(obj, "rating", None)
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.context.get("rating", False):
+            fields["rating"] = serializers.FloatField(default=None, read_only=True)
+
+        return fields
 
 
 class CollectibleItemSerializer(serializers.ModelSerializer):
