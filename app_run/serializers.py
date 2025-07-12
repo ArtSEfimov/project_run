@@ -13,7 +13,7 @@ class PartialUserSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "last_name", "first_name", "rating")
 
     def get_rating(self, obj):
-        return obj.rating
+        return getattr(obj, "rating", None)
 
 
 class CollectibleItemSerializer(serializers.ModelSerializer):
