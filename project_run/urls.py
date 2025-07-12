@@ -47,5 +47,6 @@ urlpatterns = [
     path("api/subscribe_to_coach/<int:id>/", SubscribeCreateView.as_view(), name="subscribe_to_coach"),
     path("api/challenges_summary/", ChallengesSummaryView.as_view(), name="challenges_summary"),
     path("api/rate_coach/<int:coach_id>/", RateCoachView.as_view(), name="rate_coach"),
+    path("api/analytics_for_coach/<int:coach_id>//", RateCoachView.as_view(), name="analytics_for_coach"),
 
 ]
